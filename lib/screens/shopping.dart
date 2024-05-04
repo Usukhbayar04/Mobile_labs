@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/models/products.dart';
 import 'package:shop_app/provider/globalProvider.dart';
+import 'package:shop_app/repository/repository.dart';
 import 'package:shop_app/widgets/ProductView.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -14,14 +15,13 @@ class ShopPage extends StatefulWidget {
 }
 
 class _ShopPageState extends State<ShopPage> {
+  MyRepository repository = new MyRepository();
 
   Future<List<ProductModel>?> _getProductData() async {
-    final response = await http.get(Uri.parse('https://fakestoreapi.com/products'));
-    if (response.statusCode ==200){
-      List<ProductModel> data = ProductModel.fromList(jsonDecode(response.body));
+      List<ProductModel> data = await repository.fetchProductData();
       Provider.of<Global_provider>(context, listen:false).setProduts(data);
     return  Provider.of<Global_provider>(context, listen: false).products;
-    }
+    
   }
 
  @override

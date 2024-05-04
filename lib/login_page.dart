@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:shop_app/home.dart';
 import 'package:shop_app/provider/globalProvider.dart';
+import 'package:shop_app/repository/repository.dart';
+import 'package:shop_app/services/httpService.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -16,32 +18,22 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool _changeButton = false;
   final _formKey = GlobalKey<FormState>();
+  final MyRepository repository = MyRepository();
+
 
   String _userName = "mor_2314";
   String _userPass = "83r5^_";
 
   moveToHome(BuildContext context) async{
-    var headers = {
-      'Content-Type': 'application/json'
-    };
-    var request = http.Request('POST', Uri.parse('https://fakestoreapi.com/auth/login'));
-    request.body = json.encode({
-      "username": _userName,
-      "password": _userPass
-    });
-    request.headers.addAll(headers);
+   String token = await repository.login(_userName, _userPass);
 
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-      String strToken = await response.stream.bytesToString();
-      Map<String, dynamic> jsonMap =json.decode(strToken);
-      Provider.of<Global_provider>(context, listen: false).saveToken(jsonMap["token"]!);
+    if (token!=null) {
+      Provider.of<Global_provider>(context, listen: false).saveToken(token);
       print(await Provider.of<Global_provider>(context, listen: false).getToken());
       Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage()));
     }
     else {
-      print(response.reasonPhrase);
+      print(token);
     }
   }
 
@@ -56,6 +48,9 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                SizedBox(
+                  height: 150,
+                ),
                 Text("Тавтай морил",
                     style: TextStyle(
                       fontSize: 24,

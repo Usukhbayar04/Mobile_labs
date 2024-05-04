@@ -27,7 +27,45 @@ class Global_provider extends ChangeNotifier{
     cartItems.removeWhere((e)=>e.id == data.id);
     notifyListeners();
   }
-  
+    void incrementCount(ProductModel item) {
+    int index =
+        cartItems.indexWhere((cartItem) => cartItem.title == item.title);
+
+    if (index != -1) {
+      cartItems[index].count++;
+      //addProductCart(cartId!, user!.id!, item.id!, item.count);
+      notifyListeners();
+    }
+  }
+
+  void decrementCount(ProductModel item) {
+    int index =
+        cartItems.indexWhere((cartItem) => cartItem.title == item.title);
+
+    if (index != -1) {
+      cartItems[index].count--;
+      //addProductCart(cartId!, user!.id!, item.id!, item.count);
+      notifyListeners();
+    }
+  }
+
+  void setFavorite(ProductModel item) {
+    int index = products.indexWhere((product) => product.title == item.title);
+
+    if (index != -1) {
+      products[index].isFavorite = !products[index].isFavorite;
+      int favIndex =
+          favoriteItems.indexWhere((favItem) => favItem.title == item.title);
+
+      if (favIndex == -1 && products[index].isFavorite) {
+        favoriteItems.add(products[index]);
+      } else if (favIndex != -1 && !products[index].isFavorite) {
+        favoriteItems.removeAt(favIndex);
+      }
+
+      notifyListeners();
+    }
+  }
   void changeCurrentIdx(int idx){
     currentIndex = idx;
     notifyListeners();
