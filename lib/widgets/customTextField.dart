@@ -3,28 +3,35 @@
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
-  final String labelText;
-  final BorderRadius borderRadius;
-  final FormFieldValidator<String>? validator;
+  // ignore: prefer_typing_uninitialized_variables
+  final controller;
+  final String hintText;
+  final bool obscureText;
 
-  CustomTextField({
+  const CustomTextField({
     super.key,
-    required this.labelText,
-    this.borderRadius = BorderRadius.zero,
-    this.validator,
-    required Function(dynamic value) onSaved,
+    required this.controller,
+    required this.hintText,
+    required this.obscureText,
   });
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
+    return TextField(
+      controller: controller,
+      obscureText: obscureText,
       decoration: InputDecoration(
-        labelText: labelText,
-        border: OutlineInputBorder(
-          borderRadius: borderRadius, // Set the borderRadius property here
+        hintText: hintText,
+        hintStyle: TextStyle(color: Colors.grey[500]),
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white),
         ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey.shade400),
+        ),
+        fillColor: Colors.grey.shade200,
+        filled: true,
       ),
-      validator: validator,
     );
   }
 }

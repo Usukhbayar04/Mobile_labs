@@ -1,30 +1,16 @@
-// ignore_for_file: unused_field
-
 import 'package:flutter/material.dart';
-import 'package:login_signup/widgets/customButton.dart';
 import 'package:login_signup/widgets/customTextField.dart';
 import '../../utils/sizes/sizes.dart';
+import '../../widgets/customButton.dart';
 import '../../widgets/mTextStyle.dart';
 import 'signup_screen.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
 
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
+  final userNameController = TextEditingController();
 
-class _LoginScreenState extends State<LoginScreen> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late String _email;
-  late String _password;
-
-  void _submit() {
-    final form = _formKey.currentState;
-    if (form!.validate()) {
-      form.save();
-    }
-  }
+  final userPassController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -60,27 +46,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   CustomTextField(
-                    labelText: 'Email',
-                    borderRadius: BorderRadius.circular(10.0),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your email address';
-                      }
-                      return null;
-                    },
-                    onSaved: (value) => _email = value!,
+                    controller: userNameController,
+                    hintText: 'Email',
+                    obscureText: false,
                   ),
                   heightMedium,
                   CustomTextField(
-                    labelText: 'Password',
-                    borderRadius: BorderRadius.circular(10.0),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your password';
-                      }
-                      return null;
-                    },
-                    onSaved: (value) => _password = value!,
+                    controller: userPassController,
+                    hintText: 'Password',
+                    obscureText: true,
                   ),
                   heightMedium,
                   Text(
@@ -89,43 +63,36 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   heightMax,
                   CustomButton(
-                    onPressed: _submit,
+                    onPressed: () {},
                     text: 'LOGIN',
                   ),
                 ],
               ),
-              heightMax,
+              heightMedium,
               heightMedium,
               Column(
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SignUpScreen(),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          'Signup',
-                          style: TextStyle(
-                            color: Colors.black87,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            decoration: TextDecoration.underline,
-                          ),
+                      Expanded(
+                        child: Divider(
+                          thickness: 0.5,
+                          color: Colors.grey[400],
                         ),
                       ),
                       Text(
-                        ' Or login with social account',
+                        ' Or continue with ',
                         style: meTextStyle(),
+                      ),
+                      Expanded(
+                        child: Divider(
+                          thickness: 0.5,
+                          color: Colors.grey[400],
+                        ),
                       ),
                     ],
                   ),
+                  heightMedium,
                   heightMedium,
                   const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -142,9 +109,34 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 60,
                       ),
                     ],
-                  )
+                  ),
+                  heightMedium,
+                  heightMedium,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SignUpScreen(),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          'Not a member? Register now',
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),
