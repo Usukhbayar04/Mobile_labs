@@ -2,11 +2,8 @@ class FormValidators {
   static String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter your email';
-    }
-
-    // final emailREgExp = RegExp('source');
-    if (value.length < 6) {
-      return 'Please enter a valid email';
+    } else if (!value.contains('@')) {
+      return 'Please enter a valid email address';
     }
     return null;
   }

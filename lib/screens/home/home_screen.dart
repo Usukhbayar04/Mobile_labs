@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../utils/colors/colors.dart';
 import '../login/login_screen.dart';
 
@@ -28,7 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
                 );
               },
               style: ButtonStyle(
