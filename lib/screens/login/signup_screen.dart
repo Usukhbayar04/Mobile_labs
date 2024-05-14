@@ -6,14 +6,13 @@ import '../../widgets/customButton.dart';
 import '../../widgets/customTextField.dart';
 import '../../widgets/mTextStyle.dart';
 
-class SignUpScreen extends StatefulWidget {
+class SignUpScreen extends StatelessWidget {
   SignUpScreen({super.key});
 
-  @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
-}
+  final userNameController = TextEditingController();
+  final userMailController = TextEditingController();
+  final userPassController = TextEditingController();
 
-class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,26 +46,40 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   CustomTextField(
-                    labelText: 'Name',
-                    borderRadius: BorderRadius.circular(10.0),
-                    onSaved: (value) {},
+                    hintText: 'Name',
+                    obscureText: false,
+                    controller: userNameController,
                   ),
                   heightMedium,
                   CustomTextField(
-                    labelText: 'Email',
-                    borderRadius: BorderRadius.circular(10.0),
-                    onSaved: (value) {},
+                    hintText: 'Email',
+                    obscureText: false,
+                    controller: userMailController,
                   ),
                   heightMedium,
                   CustomTextField(
-                    labelText: 'Password',
-                    borderRadius: BorderRadius.circular(10.0),
-                    onSaved: (value) {},
+                    hintText: 'Password',
+                    obscureText: true,
+                    controller: userPassController,
                   ),
                   heightMedium,
-                  Text(
-                    'Already have a account?',
-                    style: meTextStyle(),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginScreen(),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      'Already have a account?',
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ),
                   heightMax,
                   CustomButton(
@@ -79,30 +92,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Column(
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LoginScreen(),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          'Login',
-                          style: TextStyle(
-                            color: Colors.black87,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            decoration: TextDecoration.underline,
-                          ),
+                      Expanded(
+                        child: Divider(
+                          thickness: 0.5,
+                          color: Colors.grey[400],
                         ),
                       ),
                       Text(
-                        ' Or sign up with social account',
+                        ' Or continue with ',
                         style: meTextStyle(),
+                      ),
+                      Expanded(
+                        child: Divider(
+                          thickness: 0.5,
+                          color: Colors.grey[400],
+                        ),
                       ),
                     ],
                   ),
@@ -122,9 +127,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         height: 60,
                       ),
                     ],
-                  )
+                  ),
+                  heightMedium,
                 ],
-              )
+              ),
             ],
           ),
         ),
