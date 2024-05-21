@@ -1,11 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/models/products.dart';
 import 'package:shop_app/provider/globalProvider.dart';
 import 'package:shop_app/repository/repository.dart';
 import 'package:shop_app/widgets/ProductView.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
@@ -15,16 +14,21 @@ class ShopPage extends StatefulWidget {
 }
 
 class _ShopPageState extends State<ShopPage> {
-  MyRepository repository = new MyRepository();
+  MyRepository repository = MyRepository();
 
   Future<List<ProductModel>?> _getProductData() async {
+    Global_provider provider =
+        Provider.of<Global_provider>(context, listen: false);
+    if (provider.products.isEmpty) {
       List<ProductModel> data = await repository.fetchProductData();
-      Provider.of<Global_provider>(context, listen:false).setProduts(data);
-    return  Provider.of<Global_provider>(context, listen: false).products;
-    
+      provider.setProducts(data);
+      return data;
+    } else {
+      return provider.products;
+    }
   }
 
- @override
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: _getProductData(),
@@ -35,11 +39,11 @@ class _ShopPageState extends State<ShopPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 10),
-                const Padding(
-                  padding: EdgeInsets.only(left: 10),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
                   child: Text(
-                    "Бараанууд",
-                    style: TextStyle(
+                    "Products".tr(),
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Color.fromARGB(223, 37, 37, 37),
@@ -65,7 +69,7 @@ class _ShopPageState extends State<ShopPage> {
         } else {
           return const Center(
             child: SizedBox(
-              height:25,
+              height: 25,
               width: 25,
               child: CircularProgressIndicator(),
             ),

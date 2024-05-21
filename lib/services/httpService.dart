@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class HttpService {
-  final String baseUrl="https://fakestoreapi.com";
+  final String baseUrl = "https://fakestoreapi.com";
 
   HttpService();
 
@@ -11,7 +11,11 @@ class HttpService {
       print('$baseUrl/$endpoint');
       final response = await http.get(
         Uri.parse('$baseUrl/$endpoint'),
-        headers: token != null ? {'Authorization': 'Bearer $token', } : null,
+        headers: token != null
+            ? {
+                'Authorization': 'Bearer $token',
+              }
+            : null,
       );
       if (response.statusCode == 200) {
         return json.decode(response.body);
@@ -64,7 +68,8 @@ class HttpService {
     }
   }
 
-  Future<dynamic> deleteData(String endpoint, String? token, dynamic data) async {
+  Future<dynamic> deleteData(
+      String endpoint, String? token, dynamic data) async {
     try {
       final response = await http.delete(
         Uri.parse('$baseUrl/$endpoint'),

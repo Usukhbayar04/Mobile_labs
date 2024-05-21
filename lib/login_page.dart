@@ -1,39 +1,49 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 import 'package:shop_app/home.dart';
 import 'package:shop_app/provider/globalProvider.dart';
 import 'package:shop_app/repository/repository.dart';
-import 'package:shop_app/services/httpService.dart';
+
+import 'models/cartProduct.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool _changeButton = false;
+  final bool _changeButton = false;
   final _formKey = GlobalKey<FormState>();
   final MyRepository repository = MyRepository();
-
 
   String _userName = "mor_2314";
   String _userPass = "83r5^_";
 
-  moveToHome(BuildContext context) async{
-   String token = await repository.login(_userName, _userPass);
-
-    if (token!=null) {
+  moveToHome(BuildContext context) async {
+    try {
+      String token = await repository.login(_userName, _userPass);
       Provider.of<Global_provider>(context, listen: false).saveToken(token);
-      print(await Provider.of<Global_provider>(context, listen: false).getToken());
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage()));
-    }
-    else {
-      print(token);
+      print(
+          'token got : ${await Provider.of<Global_provider>(context, listen: false).getToken()}');
+
+      int userId = await repository.getUserId(_userName);
+      var userCartData = await repository.getUserCart(userId);
+
+      List<Cart> userCart = (userCartData as List)
+          .map((cartJson) => Cart.fromJson(cartJson))
+          .toList();
+
+      Provider.of<Global_provider>(context, listen: false)
+          .setCartItems(userCart.first.products!);
+
+      print('User ID : $userId');
+      print('User cart:  $userCartData');
+
+      Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
+    } catch (e) {
+      print('Error is $e');
     }
   }
 
@@ -48,15 +58,15 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 150,
                 ),
-                Text("Тавтай морил",
+                const Text("Тавтай морил",
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     )),
-                SizedBox(
+                const SizedBox(
                   height: 26,
                 ),
                 Padding(
@@ -67,13 +77,14 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(
                         width: true
                             ? 500
+                            // ignore: dead_code
                             : MediaQuery.of(context).size.width,
                         child: TextFormField(
                           onChanged: (value) {
                             _userName = value;
                           },
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.person),
+                          decoration: const InputDecoration(
+                              prefixIcon: Icon(Icons.person),
                               hintText: "Нэрээ оруулна уу",
                               label: Text("Нэр:")),
                           validator: (value) {
@@ -87,13 +98,14 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(
                         width: true
                             ? 500
+                            // ignore: dead_code
                             : MediaQuery.of(context).size.width,
                         child: TextFormField(
                           onChanged: (value) {
                             _userPass = value;
                           },
                           obscureText: true,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.lock),
                             hintText: "Нууц үг оруул",
                             label: Text("Нууц үг"),
@@ -106,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                           },
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20.0,
                       ),
                       Material(
@@ -117,16 +129,16 @@ class _LoginPageState extends State<LoginPage> {
                           onTap: () => moveToHome(context),
                           child: AnimatedContainer(
                             color: Colors.transparent,
-                            duration: Duration(seconds: 1),
+                            duration: const Duration(seconds: 1),
                             height: 50,
                             width: _changeButton ? 50 : 150,
                             alignment: Alignment.center,
                             child: _changeButton
-                                ? Icon(
+                                ? const Icon(
                                     Icons.done,
                                     color: Colors.white,
                                   )
-                                : Text(
+                                : const Text(
                                     "Нэвтрэх",
                                     style: TextStyle(
                                         color: Colors.white,

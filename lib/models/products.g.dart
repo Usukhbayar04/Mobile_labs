@@ -6,13 +6,9 @@ part of 'products.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-// **************************************************************************
-// JsonSerializableGenerator
-// **************************************************************************
-
 ProductModel _$ProductModelFromJson(Map<String, dynamic> json) => ProductModel(
       isFavorite: json['isFavorite'] as bool? ?? false,
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       title: json['title'] as String?,
       price: (json['price'] as num?)?.toDouble(),
       description: json['description'] as String?,
@@ -21,10 +17,10 @@ ProductModel _$ProductModelFromJson(Map<String, dynamic> json) => ProductModel(
       rating: json['rating'] == null
           ? null
           : Rating.fromJson(json['rating'] as Map<String, dynamic>),
-      count: json['count'] as int? ?? 1,
+      count: (json['count'] as num?)?.toInt() ?? 1,
     );
 
 Rating _$RatingFromJson(Map<String, dynamic> json) => Rating(
       rate: (json['rate'] as num?)?.toDouble(),
-      count: json['count'] as int?,
+      count: (json['count'] as num?)?.toInt(),
     );
