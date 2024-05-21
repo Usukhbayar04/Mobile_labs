@@ -1,6 +1,8 @@
-import '../screens/place_detail.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/place.dart';
+import '../providers/user_places.dart';
+import '../screens/place_detail.dart';
 
 class PlacesList extends StatelessWidget {
   const PlacesList({super.key, required this.places});
@@ -22,6 +24,14 @@ class PlacesList extends StatelessWidget {
     return ListView.builder(
       itemCount: places.length,
       itemBuilder: (ctx, index) => ListTile(
+        leading: CircleAvatar(
+          radius: 26,
+          backgroundImage: FileImage(places[index].image),
+        ),
+        trailing: IconButton(
+          icon: const Icon(Icons.delete),
+          onPressed: () => _deletePlace(context, places[index]),
+        ),
         title: Text(
           places[index].title,
           style: Theme.of(context).textTheme.titleMedium!.copyWith(
@@ -37,5 +47,9 @@ class PlacesList extends StatelessWidget {
         },
       ),
     );
+  }
+
+  void _deletePlace(BuildContext context, Place place) {
+    Provider.of<Provider_Place>(context, listen: false).deletePlace(place.id);
   }
 }

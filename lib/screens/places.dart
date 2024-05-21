@@ -10,28 +10,28 @@ class PlacesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<Provider_Place>(
-              builder: (context, provider, child) {
-                return Scaffold(
-                  appBar: AppBar(
-                    title: const Text('Your Places'),
-                    actions: [
-                      IconButton(
-                        icon: const Icon(Icons.add),
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (ctx) => const AddPlaceScreen(),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                  body: PlacesList(
-                    places: provider.userPlaces,
-                  ),
-                );
-              }
-            );
-}
+      builder: (context, provider, child) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Your Places'),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.add),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (ctx) => const AddPlaceScreen(),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+          body: PlacesList(
+            places: provider.userPlaces,
+          ),
+        );
+      },
+    );
+  }
 }
